@@ -6,54 +6,17 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    public abstract class BinaryTreeNode<TNode> : IComparable<TNode> where TNode : IComparable<TNode>
+    public abstract class BinaryTreeNode<TNode> : ITreeNode<TNode> where TNode : IComparable<TNode>
     {
-        protected TNode _value;
+        public TNode Value { get; set; }
 
-        protected BinaryTreeNode<TNode> _left;
-        protected BinaryTreeNode<TNode> _right;
 
-        public virtual TNode Value
+
+        protected BinaryTreeNode(TNode value)
         {
-            get
-            {
-                return _value;
-            }
-            protected set
-            {
-                _value = value;
-            }
+            Value = value;
         }
 
-        public virtual BinaryTreeNode<TNode> Left
-        {
-            get
-            {
-                return _left;
-            }
-            set
-            {
-                _left = value;
-            }
-        }
-
-        public virtual BinaryTreeNode<TNode> Right
-        {
-            get
-            {
-                return _right;
-            }
-            set
-            {
-                _right = value;
-            }
-        }
-
-
-        public BinaryTreeNode(TNode value)
-        {
-            _value = value;
-        }
 
 
         public int CompareTo(TNode other)
@@ -67,6 +30,7 @@ namespace MyTreesLib
         }
 
 
+
         public static bool operator >(BinaryTreeNode<TNode> node1, BinaryTreeNode<TNode> node2)
         {
             return node1.CompareNode(node2) > 0;
@@ -74,7 +38,7 @@ namespace MyTreesLib
 
         public static bool operator <(BinaryTreeNode<TNode> node1, BinaryTreeNode<TNode> node2)
         {
-            return node1.CompareNode(node2) < 0;            
+            return node1.CompareNode(node2) < 0;
         }
 
         public static bool operator >=(BinaryTreeNode<TNode> node1, BinaryTreeNode<TNode> node2)

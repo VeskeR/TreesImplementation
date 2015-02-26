@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    class AvlTree<T> : BinaryTree<T> where T : IComparable<T>
+    interface ITreeNode<TNode> : IComparable<TNode> where TNode : IComparable<TNode>
     {
-        
+        TNode Value { get; set; }
     }
 }

@@ -23,6 +23,18 @@ namespace TestingNodes
 
             binSearchTree.AddRange(new[] {100,50,25,75});
 
+            binSearchTree.Add(-5);
+            binSearchTree.Add(-10);
+            binSearchTree.Add(-25);
+
+            printTree(binSearchTree);
+
+            binSearchTree.Clear();
+
+            printTree(binSearchTree);
+
+            binSearchTree.AddRange(new[] {100,50,25,75});
+
             printTree(binSearchTree);
 
             Console.WriteLine(binSearchTree.Contains(100));

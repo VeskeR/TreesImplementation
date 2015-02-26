@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    public abstract class BinaryTree<T> : IEnumerable<T> where T : IComparable<T>
+    public class BinarySearchTree<T> : BinaryTree<T> where T : IComparable<T>
     {
-        public BinaryTreeNode<T> Head { get; protected set; }
-
-        public virtual int Count { get; protected set; }
+        public BinarySearchTreeNode<T> Head { get; protected set; }
 
 
-        public BinaryTree()
+
+        public BinarySearchTree()
         {
             
         }
 
-        public BinaryTree(IEnumerable<T> collection)
+        public BinarySearchTree(IEnumerable<T> collection)
+            :base(collection)
         {
-            AddRange(collection);
+
         }
 
 
-        public virtual void Add(T value)
+
+        public override sealed void Add(T value)
         {
             if (Head == null)
             {
@@ -39,15 +42,7 @@ namespace MyTreesLib
             Count++;
         }
 
-        public void AddRange(IEnumerable<T> collection)
-        {
-            foreach (T value in collection)
-            {
-                Add(value);
-            }
-        }
-
-        private void AddTo(BinaryTreeNode<T> node, T value)
+        protected void AddTo(BinarySearchTreeNode<T> node, T value)
         {
             if (value.CompareTo(node.Value) < 0)
             {
@@ -74,21 +69,22 @@ namespace MyTreesLib
         }
 
 
-        public virtual bool Contains(T value)
+
+        public override sealed bool Contains(T value)
         {
-            BinaryTreeNode<T> parent;
+            BinarySearchTreeNode<T> parent;
             return FindWithParent(value, out parent) != null;
         }
 
-
-        private BinaryTreeNode<T> FindWithParent(T value, out BinaryTreeNode<T> parent)
+        protected BinarySearchTreeNode<T> FindWithParent(T value, out BinarySearchTreeNode<T> parent)
         {
-            BinaryTreeNode<T> current = Head;
+            BinarySearchTreeNode<T> current = Head;
             parent = null;
 
             while (current != null)
             {
                 int compareResult = current.CompareTo(value);
+
                 if (compareResult > 0)
                 {
                     parent = current;
@@ -109,12 +105,11 @@ namespace MyTreesLib
         }
 
 
-        public bool Remove(T value)
-        {
-            BinaryTreeNode<T> current;
-            BinaryTreeNode<T> parent;
 
-            current = FindWithParent(value, out parent);
+        public override sealed bool Remove(T value)
+        {
+            BinarySearchTreeNode<T> parent;
+            BinarySearchTreeNode<T> current = FindWithParent(value, out parent);
 
             if (current == null)
             {
@@ -167,8 +162,8 @@ namespace MyTreesLib
             }
             else
             {
-                BinaryTreeNode<T> leftmost = current.Right.Left;
-                BinaryTreeNode<T> leftmostParent = current.Right;
+                BinarySearchTreeNode<T> leftmost = current.Right.Left;
+                BinarySearchTreeNode<T> leftmostParent = current.Right;
 
                 while (leftmost.Left != null)
                 {
@@ -203,23 +198,20 @@ namespace MyTreesLib
             return true;
         }
 
-
-        public virtual IEnumerator<T> GetEnumerator()
+        public override sealed void Clear()
         {
-            return InOrderTraversal();
+            Head = null;
+            Count = 0;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
 
-        public virtual IEnumerator<T> InOrderTraversal()
+
+        public override sealed IEnumerator<T> InOrderTraversal()
         {
             if (Head != null)
             {
-                Stack<BinaryTreeNode<T>> stack = new Stack<BinaryTreeNode<T>>();
-                BinaryTreeNode<T> current = Head;
+                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                BinarySearchTreeNode<T> current = Head;
 
                 bool goLeftNext = true;
 

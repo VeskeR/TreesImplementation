@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    class AvlTreeNode<TNode> : BinaryTreeNode<TNode> where TNode : IComparable<TNode>
+    public class AvlTreeNode<TNode> : BinaryTreeNode<TNode> where TNode : IComparable<TNode>
     {
-        protected AvlTree<TNode> _tree;
-
-        protected new AvlTreeNode<TNode> _left;
-        protected new AvlTreeNode<TNode> _right;
+        protected AvlTreeNode<TNode> _left;
+        protected AvlTreeNode<TNode> _right;
 
 
-        public new AvlTreeNode<TNode> Left
+
+        public AvlTreeNode<TNode> Left
         {
             get
             {
@@ -31,7 +30,7 @@ namespace MyTreesLib
             }
         }
 
-        public new AvlTreeNode<TNode> Right
+        public AvlTreeNode<TNode> Right
         {
             get
             {
@@ -50,12 +49,15 @@ namespace MyTreesLib
 
         public AvlTreeNode<TNode> Parent { get; protected set; }
 
+        public AvlTree<TNode> Tree { get; protected set; }
+
+
 
         public AvlTreeNode(TNode value, AvlTreeNode<TNode> parent, AvlTree<TNode> tree)
             : base(value)
         {
             Parent = parent;
-            _tree = tree;
+            Tree = tree;
         }
     }
 }
