@@ -1,0 +1,5 @@
+D:\Work\!-KPI\1 курс 2 семестр\Алгоритмы и структуры данных\лабы\ЛР 3\MyTrees\Trees\bin\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 курс 2 семестр\Алгоритмы и структуры данных\лабы\ЛР 3\MyTrees\Trees\bin\Debug\MyTreesLib.pdb
+D:\Work\!-KPI\1 курс 2 семестр\Алгоритмы и структуры данных\лабы\ЛР 3\MyTrees\Trees\obj\Debug\MyTreesLib.csprojResolveAssemblyReference.cache
+D:\Work\!-KPI\1 курс 2 семестр\Алгоритмы и структуры данных\лабы\ЛР 3\MyTrees\Trees\obj\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 курс 2 семестр\Алгоритмы и структуры данных\лабы\ЛР 3\MyTrees\Trees\obj\Debug\MyTreesLib.pdb
