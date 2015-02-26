@@ -62,6 +62,8 @@ namespace MyTreesLib
                     AddTo(node.Right, value);
                 }
             }
+
+            node.Balance();
         }
 
 
@@ -100,7 +102,119 @@ namespace MyTreesLib
 
         public override sealed bool Remove(T value)
         {
-            throw new NotImplementedException();
+            AvlTreeNode<T> current = Find(value);
+
+            if (current == null)
+            {
+                return false;
+            }
+
+            AvlTreeNode<T> treeToBalance = current.Parent;
+            Count--;
+
+            if (current.Right == null)
+            {
+                if (current.Parent == null)
+                {
+                    Head = current.Left;
+
+                    if (Head != null)
+                    {
+                        Head.Parent = null;
+                    }
+                }
+                else
+                {
+                    int compareResult = current.Parent.CompareNode(current);
+
+                    if (compareResult > 0)
+                    {
+                        current.Parent.Left = current.Left;
+                    }
+                    else if (compareResult < 0)
+                    {
+                        current.Parent.Right = current.Left;                        
+                    }
+                }
+            }
+            else if (current.Right.Left == null)
+            {
+                current.Right.Left = current.Left;
+
+                if (current.Parent == null)
+                {
+                    Head = current.Right;
+
+                    if (Head != null)
+                    {
+                        Head.Parent = null;
+                    }
+                }
+                else
+                {
+                    int compareResult = current.Parent.CompareNode(current);
+
+                    if (compareResult > 0)
+                    {
+                        current.Parent.Left = current.Right;
+                    }
+                    else if (compareResult < 0)
+                    {
+                        current.Parent.Right = current.Right;
+                    }
+                }
+            }
+            else
+            {
+                AvlTreeNode<T> leftmost = current.Right.Left;
+
+                while (leftmost.Left != null)
+                {
+                    leftmost = leftmost.Left;
+                }
+
+                leftmost.Parent.Left = leftmost.Right;
+
+                leftmost.Left = current.Left;
+                leftmost.Right = current.Right;
+
+                if (current.Parent == null)
+                {
+                    Head = leftmost;
+
+                    if (Head != null)
+                    {
+                        Head.Parent = null;
+                    }
+                }
+                else
+                {
+                    int compareResult = current.Parent.CompareNode(current);
+
+                    if (compareResult > 0)
+                    {
+                        current.Parent.Left = leftmost;
+                    }
+                    else if (compareResult < 0)
+                    {
+                        current.Parent.Right = leftmost;                        
+                    }
+                }
+            }
+
+            if (treeToBalance != null)
+            {
+                treeToBalance.Balance();
+            }
+            else
+            {
+                if (Head != null)
+                {
+                    Head.Balance();
+                }
+            }
+
+            return true;
         }
 
         public override sealed void Clear()

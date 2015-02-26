@@ -11,34 +11,15 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            BinarySearchTree<int> binSearchTree = new BinarySearchTree<int>();
-            binSearchTree.AddRange(new[] {4,6,2,8,7,1,9,3,12,16,10,25,11,13,17,20,25,19});
+            AvlTree<int> avlTree = new AvlTree<int>(new[] {10,3,2,4,12,15,11,25});
 
-            printTree(binSearchTree);
+            avlTree.Remove(11);
 
-            binSearchTree.Remove(10);
-            binSearchTree.Remove(25);
+            avlTree.Clear();
 
-            printTree(binSearchTree);
+            avlTree.AddRange(Enumerable.Range(1, 256));
 
-            binSearchTree.AddRange(new[] {100,50,25,75});
-
-            binSearchTree.Add(-5);
-            binSearchTree.Add(-10);
-            binSearchTree.Add(-25);
-
-            printTree(binSearchTree);
-
-            binSearchTree.Clear();
-
-            printTree(binSearchTree);
-
-            binSearchTree.AddRange(new[] {100,50,25,75});
-
-            printTree(binSearchTree);
-
-            Console.WriteLine(binSearchTree.Contains(100));
-            Console.WriteLine(binSearchTree.Contains(200));
+            printTree(avlTree);
 
             Console.ReadLine();
         }

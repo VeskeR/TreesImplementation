@@ -8,6 +8,6 @@ namespace MyTreesLib
 {
     interface ITreeNode<TNode> : IComparable<TNode> where TNode : IComparable<TNode>
     {
-        TNode Value { get; set; }
+        TNode Value { get; }
     }
 }

@@ -8,7 +8,7 @@ namespace MyTreesLib
 {
     public abstract class BinaryTreeNode<TNode> : ITreeNode<TNode> where TNode : IComparable<TNode>
     {
-        public TNode Value { get; set; }
+        public TNode Value { get; private set; }
 
 
 
