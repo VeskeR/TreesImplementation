@@ -11,17 +11,22 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            BinarySearchTree<int> avlTree = new BinarySearchTree<int>();
 
-            avlTree.AddRange(new[] { 4, 2, 5, 1, 3, 7, 6, 8 });
+            SortedDictionary<int, int> dict = new SortedDictionary<int, int>();
+            dict.Add(5, 5);
+            dict.Add(4, 4);
+            dict.Add(2, 2);
+            dict.Add(9, 9);
+            dict.Add(15, 15);
+            dict.Add(0, 0);
+            dict.Add(10, 10);
+            dict.Add(-9, -9);
+            dict.Add(25, 25);
 
-            printTree(avlTree);
-
-            foreach (int i in avlTree.GetEnumerable(TreeTraversalOrder.PreOrder))
+            foreach (KeyValuePair<int, int> pair in dict)
             {
-                Console.WriteLine(i);
+                Console.WriteLine("'{0}' = {1}", pair.Key, pair.Value);
             }
-
 
             Console.ReadLine();
         }
