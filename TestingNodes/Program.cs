@@ -7,25 +7,33 @@ using MyTreesLib;
 
 namespace TestingNodes
 {
+    static class MyList
+    {
+        static public void AddSorted<TValue>(this List<TValue> list, TValue item)
+        {
+            list.Add(item);
+            list.Sort();
+        }
+
+        static public void AddRangeSorted<TValue>(this List<TValue> list, IEnumerable<TValue> collection)
+        {
+            list.AddRange(collection);
+            list.Sort();
+        }
+    }
+
+
     class Program
     {
         static void Main(string[] args)
         {
+            List<int> list = new List<int>(new[] {651,3,534,652,346,23,46,234,5,143,51,4,6523,6,2});
 
-            SortedDictionary<int, int> dict = new SortedDictionary<int, int>();
-            dict.Add(5, 5);
-            dict.Add(4, 4);
-            dict.Add(2, 2);
-            dict.Add(9, 9);
-            dict.Add(15, 15);
-            dict.Add(0, 0);
-            dict.Add(10, 10);
-            dict.Add(-9, -9);
-            dict.Add(25, 25);
+            list.AddSorted(5);
 
-            foreach (KeyValuePair<int, int> pair in dict)
+            foreach (var i in list)
             {
-                Console.WriteLine("'{0}' = {1}", pair.Key, pair.Value);
+                Console.WriteLine(i);
             }
 
             Console.ReadLine();

@@ -8,21 +8,22 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    public class BTreeNode<TKey, TValue> where TKey : IComparable<TKey>
+    public class BTreeMainNode<TKey, TValue> : IBTreeNode<TKey, TValue> where TKey : IComparable<TKey>
     {
-        protected List<BTreeNode<TKey, TValue>> _links;
-        protected SortedDictionary<TKey, TValue> _values;
+        protected List<BTreeMainNode<TKey, TValue>> _links;
         protected List<TKey> _keys; 
 
-        public List<BTreeNode<TKey, TValue>> Links
+        public List<BTreeMainNode<TKey, TValue>> Links
         {
             get
             {
                 return _links;
             }
-            set
+            internal set
             {
                 _links = value;
+
+                _links.Sort();
 
                 if (_links != null)
                 {
@@ -43,33 +44,24 @@ namespace MyTreesLib
                 }
             }
         }
-        public List<TKey> Keys { get; internal set; }
-        public SortedDictionary<TKey, TValue> Values
+        public List<TKey> Keys
         {
             get
             {
-                if (IsLeaf)
-                {
-                    return _values;
-                }
-
-                return null;
+                return _keys;
             }
             set
             {
-                if (IsLeaf)
-                {
-                    _values = value;
-                    _keys = value.Keys.ToList();
-                }
+                _keys = value;
+                
+                _keys.Sort();
             }
         }
 
-        public BTreeNode<TKey, TValue> ParentNode { get; internal set; }
-        public BTreeNode<TKey, TValue> NeighbourNode { get; internal set; }
+        public BTreeMainNode<TKey, TValue> ParentNode { get; internal set; }
+        public BTreeMainNode<TKey, TValue> NeighbourNode { get; internal set; }
 
         public BTree<TKey, TValue> ParentTree { get; internal set; }
-        public BTreeNode<TKey,TValue> NextLeafNode { get; internal set; }
 
         public int MaxDegree
         {
@@ -86,35 +78,22 @@ namespace MyTreesLib
             }
         }
 
-        public bool IsLeaf { get; internal set; }
+        public bool IsLeaf { get; protected set; }
         public bool IsRoot { get; internal set; }
 
 
 
 
-        public BTreeNode(List<TKey> keys, BTreeNode<TKey, TValue> parent, BTreeNode<TKey, TValue> neighbour,
+        public BTreeMainNode(List<TKey> keys, BTreeMainNode<TKey, TValue> parentNode, BTreeMainNode<TKey, TValue> neighbour,
             BTree<TKey, TValue> parentTree, bool isRoot)
         {
             Keys = keys;
-            ParentNode = parent;
+            ParentNode = parentNode;
             NeighbourNode = neighbour;
             ParentTree = parentTree;
 
             IsLeaf = false;
             IsRoot = isRoot;
-        }
-
-        public BTreeNode(SortedDictionary<TKey, TValue> values, BTreeNode<TKey, TValue> parent,
-            BTreeNode<TKey, TValue> neighbour, BTreeNode<TKey, TValue> nextLeafNode, BTree<TKey, TValue> parentTree)
-        {
-            Values = values;
-            ParentNode = parent;
-            NeighbourNode = neighbour;
-            NextLeafNode = nextLeafNode;
-            ParentTree = parentTree;
-
-            IsLeaf = true;
-            IsRoot = false;
         }
     }
 }
