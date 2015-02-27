@@ -11,15 +11,17 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            AvlTree<int> avlTree = new AvlTree<int>(new[] {10,3,2,4,12,15,11,25});
+            BinarySearchTree<int> avlTree = new BinarySearchTree<int>();
 
-            avlTree.Remove(11);
-
-            avlTree.Clear();
-
-            avlTree.AddRange(Enumerable.Range(1, 256));
+            avlTree.AddRange(new[] { 4, 2, 5, 1, 3, 7, 6, 8 });
 
             printTree(avlTree);
+
+            foreach (int i in avlTree.GetEnumerable(TreeTraversalOrder.PreOrder))
+            {
+                Console.WriteLine(i);
+            }
+
 
             Console.ReadLine();
         }

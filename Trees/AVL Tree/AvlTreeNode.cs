@@ -8,15 +8,6 @@ namespace MyTreesLib
 {
     public class AvlTreeNode<TNode> : BinaryTreeNode<TNode> where TNode : IComparable<TNode>
     {
-        protected enum TreeState
-        {
-            RightHeavy,
-            LeftHeavy,
-            Balanced
-        }
-
-
-
         protected AvlTreeNode<TNode> _left;
         protected AvlTreeNode<TNode> _right;
 

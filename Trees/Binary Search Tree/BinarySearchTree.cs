@@ -206,7 +206,7 @@ namespace MyTreesLib
 
 
 
-        public override sealed IEnumerator<T> InOrderTraversal()
+        protected override sealed IEnumerable<T> InOrderTraversal()
         {
             if (Head != null)
             {
@@ -235,6 +235,105 @@ namespace MyTreesLib
                         current = current.Right;
 
                         goLeftNext = true;
+                    }
+                    else
+                    {
+                        current = stack.Pop();
+
+                        goLeftNext = false;
+                    }
+                }
+            }
+        }
+
+        protected override IEnumerable<T> PostOrderTraversal()
+        {
+            if (Head != null)
+            {
+                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                BinarySearchTreeNode<T> current = Head;
+
+                bool goLeftNext = true;
+                bool goRightNext = true;
+
+                stack.Push(current);
+
+                while (stack.Count > 0)
+                {
+                    if (goLeftNext)
+                    {
+                        while (current.Left != null)
+                        {
+                            stack.Push(current);
+                            current = current.Left;
+                        }
+                    }
+
+
+                    if (current.Right != null && goRightNext)
+                    {
+                        stack.Push(current);
+
+                        current = current.Right;
+
+                        goLeftNext = true;
+                    }
+                    else
+                    {
+                        yield return current.Value;
+
+                        if (stack.First() != null && stack.First().Right == current)
+                        {
+                            goRightNext = false;
+                        }
+                        else
+                        {
+                            goRightNext = true;
+                        }
+
+                        current = stack.Pop();
+
+                        goLeftNext = false;
+                    }
+
+                    
+                }
+            }
+        }
+
+        protected override IEnumerable<T> PreOrderTraversal()
+        {
+            if (Head != null)
+            {
+                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                BinarySearchTreeNode<T> current = Head;
+
+                bool goLeftNext = true;
+
+                stack.Push(current);
+
+                yield return current.Value;
+
+                while (stack.Count > 0)
+                {
+                    if (goLeftNext)
+                    {
+                        while (current.Left != null)
+                        {
+                            stack.Push(current);
+                            current = current.Left;
+
+                            yield return current.Value;
+                        }
+                    }
+
+                    if (current.Right != null)
+                    {
+                        current = current.Right;
+
+                        goLeftNext = true;
+
+                        yield return current.Value;
                     }
                     else
                     {

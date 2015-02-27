@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,11 +48,30 @@ namespace MyTreesLib
 
 
 
-        public abstract IEnumerator<T> InOrderTraversal();
+        protected abstract IEnumerable<T> PostOrderTraversal();
+
+        protected abstract IEnumerable<T> PreOrderTraversal();
+
+        protected abstract IEnumerable<T> InOrderTraversal();
+
+        public IEnumerable<T> GetEnumerable(TreeTraversalOrder order)
+        {
+            switch (order)
+            {
+                case TreeTraversalOrder.InOrder:
+                    return InOrderTraversal();
+                case TreeTraversalOrder.PostOrder:
+                    return PostOrderTraversal();
+                case TreeTraversalOrder.PreOrder:
+                    return PreOrderTraversal();
+            }
+
+            return null;
+        }
 
         public virtual IEnumerator<T> GetEnumerator()
         {
-            return InOrderTraversal();
+            return InOrderTraversal().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

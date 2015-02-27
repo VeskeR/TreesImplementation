@@ -42,12 +42,16 @@
     <Compile Include="AVL Tree\AvlTree.cs" />
     <Compile Include="AVL Tree\AvlTreeNode.cs" />
     <Compile Include="Binary Search Tree\BinarySearchTreeNode.cs" />
+    <Compile Include="Enums\Enums.cs" />
     <Compile Include="Interfaces and abstract Classes\AbstractBinaryTree.cs" />
     <Compile Include="Interfaces and abstract Classes\AbstractBinaryTreeNode.cs" />
     <Compile Include="Binary Search Tree\BinarySearchTree.cs" />
     <Compile Include="Interfaces and abstract Classes\ITree.cs" />
     <Compile Include="Interfaces and abstract Classes\ITreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="B-tree\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

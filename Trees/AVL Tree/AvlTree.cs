@@ -32,13 +32,35 @@ namespace MyTreesLib
             }
             else
             {
-                AddTo(Head, value);
+                AddTo(Head, value, true);
             }
 
             Count++;
         }
 
-        protected void AddTo(AvlTreeNode<T> node, T value)
+        public void AddWithoutBalance(T value)
+        {
+            if (Head == null)
+            {
+                Head = new AvlTreeNode<T>(value, null, this);
+            }
+            else
+            {
+                AddTo(Head, value, false);
+            }
+
+            Count++;
+        }
+
+        public void AddRangeWithoutBalance(IEnumerable<T> collection)
+        {
+            foreach (var item in collection)
+            {
+                AddWithoutBalance(item);
+            }
+        }
+
+        protected void AddTo(AvlTreeNode<T> node, T value, bool balance)
         {
             if (value.CompareTo(node.Value) < 0)
             {
@@ -48,7 +70,7 @@ namespace MyTreesLib
                 }
                 else
                 {
-                    AddTo(node.Left, value);
+                    AddTo(node.Left, value, balance);
                 }
             }
             else
@@ -59,11 +81,11 @@ namespace MyTreesLib
                 }
                 else
                 {
-                    AddTo(node.Right, value);
+                    AddTo(node.Right, value, balance);
                 }
             }
 
-            node.Balance();
+            if (balance) node.Balance();
         }
 
 
@@ -102,6 +124,16 @@ namespace MyTreesLib
 
         public override sealed bool Remove(T value)
         {
+            return _remove(value, true);
+        }
+
+        public bool RemoveWithoutBalance(T value, bool balance)
+        {
+            return _remove(value, false);
+        }
+
+        protected bool _remove(T value, bool balance)
+        {
             AvlTreeNode<T> current = Find(value);
 
             if (current == null)
@@ -133,7 +165,7 @@ namespace MyTreesLib
                     }
                     else if (compareResult < 0)
                     {
-                        current.Parent.Right = current.Left;                        
+                        current.Parent.Right = current.Left;
                     }
                 }
             }
@@ -197,21 +229,24 @@ namespace MyTreesLib
                     }
                     else if (compareResult < 0)
                     {
-                        current.Parent.Right = leftmost;                        
+                        current.Parent.Right = leftmost;
                     }
                 }
             }
 
-            if (treeToBalance != null)
+            if (balance)
             {
-                treeToBalance.Balance();
-            }
-            else
-            {
-                if (Head != null)
+                if (treeToBalance != null)
                 {
-                    Head.Balance();
+                    treeToBalance.Balance();
                 }
+                else
+                {
+                    if (Head != null)
+                    {
+                        Head.Balance();
+                    }
+                } 
             }
 
             return true;
@@ -225,7 +260,7 @@ namespace MyTreesLib
 
 
 
-        public override IEnumerator<T> InOrderTraversal()
+        protected override IEnumerable<T> InOrderTraversal()
         {
             if (Head != null)
             {
@@ -254,6 +289,102 @@ namespace MyTreesLib
                         current = current.Right;
 
                         goLeftNext = true;
+                    }
+                    else
+                    {
+                        current = stack.Pop();
+
+                        goLeftNext = false;
+                    }
+                }
+            }
+        }
+
+        protected override IEnumerable<T> PostOrderTraversal()
+        {
+            if (Head != null)
+            {
+                Stack<AvlTreeNode<T>> stack = new Stack<AvlTreeNode<T>>();
+                AvlTreeNode<T> current = Head;
+
+                bool goLeftNext = true;
+                bool goRightNext = true;
+
+                stack.Push(current);
+
+                while (stack.Count > 0)
+                {
+                    if (goLeftNext)
+                    {
+                        while (current.Left != null)
+                        {
+                            stack.Push(current);
+                            current = current.Left;
+                        }
+                    }
+
+                    if (current.Right != null && goRightNext)
+                    {
+                        stack.Push(current);
+
+                        current = current.Right;
+
+                        goLeftNext = true;
+                    }
+                    else
+                    {
+                        yield return current.Value;
+
+                        if (current.Parent != null && current.Parent.Right == current)
+                        {
+                            goRightNext = false;
+                        }
+                        else
+                        {
+                            goRightNext = true;
+                        }
+
+                        current = stack.Pop();
+
+                        goLeftNext = false;
+                    }
+                }
+            }
+        }
+
+        protected override IEnumerable<T> PreOrderTraversal()
+        {
+            if (Head != null)
+            {
+                Stack<AvlTreeNode<T>> stack = new Stack<AvlTreeNode<T>>();
+                AvlTreeNode<T> current = Head;
+
+                bool goLeftNext = true;
+
+                stack.Push(current);
+
+                yield return current.Value;
+
+                while (stack.Count > 0)
+                {
+                    if (goLeftNext)
+                    {
+                        while (current.Left != null)
+                        {
+                            stack.Push(current);
+                            current = current.Left;
+
+                            yield return current.Value;
+                        }
+                    }
+
+                    if (current.Right != null)
+                    {
+                        current = current.Right;
+
+                        goLeftNext = true;
+
+                        yield return current.Value;
                     }
                     else
                     {
