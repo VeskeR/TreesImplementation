@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using MyBTreesLib;
 using MyTreesLib;
 
 namespace TestingNodes
@@ -27,14 +29,24 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            List<int> list = new List<int>(new[] {651,3,534,652,346,23,46,234,5,143,51,4,6523,6,2});
+            SortedDictionary<int, int> dict = new SortedDictionary<int, int>();
 
-            list.AddSorted(5);
+            dict.Add(1,0);
+            dict.Add(12,0);
+            dict.Add(13,0);
+            dict.Add(4,0);
+            dict.Add(5,0);
+            dict.Add(6,0);
+            dict.Add(10,0);
+            dict.Add(20,0);
+            dict.Add(0,0);
+            dict.Add(7,0);
+            dict.Add(15,0);
 
-            foreach (var i in list)
-            {
-                Console.WriteLine(i);
-            }
+            Console.WriteLine(dict.Keys.Max());
+            
+
+            printDict(dict);
 
             Console.ReadLine();
         }
@@ -46,6 +58,14 @@ namespace TestingNodes
                 Console.Write("{0}, ", item.ToString());
             }
             Console.WriteLine();
+        }
+
+        static void printDict<TKey, TValue>(SortedDictionary<TKey, TValue> dict)
+        {
+            foreach (var pair in dict)
+            {
+                Console.WriteLine("'{0}' = {1}", pair.Key, pair.Value);
+            }
         }
     }
 }

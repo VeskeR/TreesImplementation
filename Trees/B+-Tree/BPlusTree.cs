@@ -32,6 +32,7 @@ namespace MyBTreesLib
 
 
 
+
         public BPlusTree()
             :this(null, 0, 0)
         {
@@ -42,7 +43,6 @@ namespace MyBTreesLib
         {
 
         }
-
         public BPlusTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, int alpha)
         {
             IsReadOnly = false;
@@ -59,6 +59,43 @@ namespace MyBTreesLib
 
 
 
+        protected BPlusTreeNode<TKey, TValue> FindLeafThatMightContainKey(TKey key)
+        {
+            if (Head != null)
+            {
+                BPlusTreeNode<TKey, TValue> current = Head;
+
+                while (!current.IsLeaf)
+                {
+                    current = current.Links[FindIndexOfLinkToGo(current, key)];
+                }
+
+                return current;
+            }
+
+            return null;
+        }
+
+        protected int FindIndexOfLinkToGo(BPlusTreeNode<TKey, TValue> node, TKey key)
+        {
+            for (int i = 0; i < node.Keys.Count; i++)
+            {
+                if (node.Keys[i].CompareTo(key) >= 0)
+                {
+                    return i;
+                }
+            }
+
+            return node.Keys.Count;
+        }
+
+        protected bool FindValueByKeyInLeaf(BPlusTreeNode<TKey, TValue> leaf, TKey key, out TValue value)
+        {
+            return leaf.Values.TryGetValue(key, out value);
+        }
+
+
+
         public void Add(TKey key, TValue value)
         {
             Add(new KeyValuePair<TKey, TValue>(key, value));
@@ -67,7 +104,17 @@ namespace MyBTreesLib
         //TODO
         public void Add(KeyValuePair<TKey, TValue> pair)
         {
+            BPlusTreeNode<TKey, TValue> current = FindLeafThatMightContainKey(pair.Key);
 
+            if (current != null)
+            {
+                if (current.Values.Count < MaxDegree)
+                {
+                    current.Values.Add(pair.Key, pair.Value);
+
+
+                }
+            }
         }
 
         public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> collection)
@@ -80,31 +127,92 @@ namespace MyBTreesLib
 
 
 
-
         public void Clear()
         {
             Count = 0;
             Head = null;
         }
-
-        public bool Contains(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
-
+        //TODO
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             throw new NotImplementedException();
         }
 
+
+
+        public bool Find(TKey key , out TValue value)
+        {
+            BPlusTreeNode<TKey, TValue> leaf = FindLeafThatMightContainKey(key);
+
+            if (FindValueByKeyInLeaf(leaf, key, out value))
+            {
+                return true;
+            }
+
+            value = default (TValue);
+            return false;
+        }
+
+        public bool Contains(KeyValuePair<TKey, TValue> pair)
+        {
+            TValue tempValue;
+
+            if (Find(pair.Key, out tempValue) && EqualityComparer<TValue>.Default.Equals(tempValue, pair.Value))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            if (Head != null)
+            {
+                BPlusTreeNode<TKey, TValue> current = Head;
+
+                while (!current.IsLeaf)
+                {
+                    current = current.Links[0];
+                }
+
+                do
+                {
+                    foreach (KeyValuePair<TKey, TValue> pair in current.Values)
+                    {
+                        array[arrayIndex++] = pair;
+                    }
+
+                    current = current.NextLeafNode;
+                } while (current != null);
+            }
+        }
+
+
+
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            throw new NotImplementedException();
+            if (Head != null)
+            {
+                BPlusTreeNode<TKey, TValue> current = Head;
+
+                while (!current.IsLeaf)
+                {
+                    current = current.Links[0];
+                }
+
+                do
+                {
+                    foreach (KeyValuePair<TKey, TValue> pair in current.Values)
+                    {
+                        yield return pair;
+                    }
+
+                    current = current.NextLeafNode;
+                } while (current != null);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

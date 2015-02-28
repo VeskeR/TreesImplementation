@@ -25,8 +25,6 @@ namespace MyBTreesLib
             {
                 _links = value;
 
-                _links.Sort();
-
                 if (_links != null)
                 {
                     int lc = _links.Count;
@@ -56,8 +54,6 @@ namespace MyBTreesLib
             internal set
             {
                 _keys = value;
-
-                _keys.Sort();
             }
         }
 
