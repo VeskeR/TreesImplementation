@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyBTreesLib
 {
+    [Serializable]
     [Obsolete("All functionality ob B+-Trees nodes have been moved to BPlusTreeNode class. Use BPlusTreeNode class.")]
     public class BPlusTreeLeaf<TKey, TValue> :
         IBTreeNode<TKey, TValue, BPlusTreeLeaf<TKey, TValue>, BPlusTree<TKey, TValue>> where TKey : IComparable<TKey>

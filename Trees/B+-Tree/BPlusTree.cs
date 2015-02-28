@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyBTreesLib
 {
+    [Serializable]
     public class BPlusTree<TKey, TValue> : IBTree<TKey, TValue, BPlusTreeNode<TKey, TValue>>
         where TKey : IComparable<TKey>
     {

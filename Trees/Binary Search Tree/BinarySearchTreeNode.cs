@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
+    [Serializable]
     public class BinarySearchTreeNode<TNode> : BinaryTreeNode<TNode> where TNode : IComparable<TNode>
     {
         public BinarySearchTreeNode<TNode> Left { get; set; }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
+    [Serializable]
     public abstract class BinaryTree<T> : ITree<T> where T : IComparable<T>
     {
         public int Count { get; protected set; }

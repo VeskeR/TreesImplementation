@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
+    [Serializable]
     public enum TreeState
     {
         RightHeavy,
@@ -13,6 +14,7 @@ namespace MyTreesLib
         Balanced
     }
 
+    [Serializable]
     public enum TreeTraversalOrder
     {
         InOrder,

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
+    [Serializable]
     public class AvlTree<T> : BinaryTree<T> where T : IComparable<T>
     {
         public AvlTreeNode<T> Head { get; set; }

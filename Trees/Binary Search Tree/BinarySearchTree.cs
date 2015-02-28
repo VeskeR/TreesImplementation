@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
+    [Serializable]
     public class BinarySearchTree<T> : BinaryTree<T> where T : IComparable<T>
     {
         public BinarySearchTreeNode<T> Head { get; protected set; }
