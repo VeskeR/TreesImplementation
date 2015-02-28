@@ -41,9 +41,10 @@
   <ItemGroup>
     <Compile Include="AVL Tree\AvlTree.cs" />
     <Compile Include="AVL Tree\AvlTreeNode.cs" />
-    <Compile Include="B-tree\BTree.cs" />
-    <Compile Include="B-tree\BTreeLeaf.cs" />
-    <Compile Include="B-tree\BTreeMainNode.cs" />
+    <Compile Include="B-tree\BPlusTree.cs" />
+    <Compile Include="B-tree\BPlusTreeLeaf.cs" />
+    <Compile Include="B-tree\BPlusTreeMainNode.cs" />
+    <Compile Include="B-tree\IBTree.cs" />
     <Compile Include="B-tree\IBTreeNode.cs" />
     <Compile Include="Binary Search Tree\BinarySearchTreeNode.cs" />
     <Compile Include="Enums\Enums.cs" />

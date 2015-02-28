@@ -8,9 +8,9 @@ namespace MyTreesLib
 {
     interface IBTreeNode<TKey,TValue> where TKey : IComparable<TKey>
     {
-        BTreeMainNode<TKey, TValue> ParentNode { get; }
+        BPlusTreeMainNode<TKey, TValue> ParentNode { get; }
 
-        BTree<TKey, TValue> ParentTree { get; }
+        BPlusTree<TKey, TValue> ParentPlusTree { get; }
 
         int MaxDegree { get; }
         int Alpha { get; }

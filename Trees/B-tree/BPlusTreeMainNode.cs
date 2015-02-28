@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    public class BTreeMainNode<TKey, TValue> : IBTreeNode<TKey, TValue> where TKey : IComparable<TKey>
+    public class BPlusTreeMainNode<TKey, TValue> : IBTreeNode<TKey, TValue> where TKey : IComparable<TKey>
     {
-        protected List<BTreeMainNode<TKey, TValue>> _links;
+        protected List<BPlusTreeMainNode<TKey, TValue>> _links;
         protected List<TKey> _keys; 
 
-        public List<BTreeMainNode<TKey, TValue>> Links
+        public List<BPlusTreeMainNode<TKey, TValue>> Links
         {
             get
             {
@@ -58,23 +58,23 @@ namespace MyTreesLib
             }
         }
 
-        public BTreeMainNode<TKey, TValue> ParentNode { get; internal set; }
-        public BTreeMainNode<TKey, TValue> NeighbourNode { get; internal set; }
+        public BPlusTreeMainNode<TKey, TValue> ParentNode { get; internal set; }
+        public BPlusTreeMainNode<TKey, TValue> NeighbourNode { get; internal set; }
 
-        public BTree<TKey, TValue> ParentTree { get; internal set; }
+        public BPlusTree<TKey, TValue> ParentPlusTree { get; internal set; }
 
         public int MaxDegree
         {
             get
             {
-                return ParentTree.MaxDegree;
+                return ParentPlusTree.MaxDegree;
             }
         }
         public int Alpha
         {
             get
             {
-                return ParentTree.Alpha;
+                return ParentPlusTree.Alpha;
             }
         }
 
@@ -84,13 +84,13 @@ namespace MyTreesLib
 
 
 
-        public BTreeMainNode(List<TKey> keys, BTreeMainNode<TKey, TValue> parentNode, BTreeMainNode<TKey, TValue> neighbour,
-            BTree<TKey, TValue> parentTree, bool isRoot)
+        public BPlusTreeMainNode(List<TKey> keys, BPlusTreeMainNode<TKey, TValue> parentNode, BPlusTreeMainNode<TKey, TValue> neighbour,
+            BPlusTree<TKey, TValue> parentPlusTree, bool isRoot)
         {
             Keys = keys;
             ParentNode = parentNode;
             NeighbourNode = neighbour;
-            ParentTree = parentTree;
+            ParentPlusTree = parentPlusTree;
 
             IsLeaf = false;
             IsRoot = isRoot;

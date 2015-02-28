@@ -7,25 +7,59 @@ using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
-    public class BTree<TKey, TValue> : ICollection<KeyValuePair<TKey,TValue>>,IEnumerable<KeyValuePair<TKey, TValue>> where TKey : IComparable<TKey>
+    public class BPlusTree<TKey, TValue> : IBTree<TKey, TValue> where TKey : IComparable<TKey>
     {
-        public BTreeMainNode<TKey, TValue> Head { get; set; }
+        private int _maxDegree;
+        private double _alpha;
 
-        public int MaxDegree { get; set; }
-        public int Alpha { get; set; }
+        public BPlusTreeMainNode<TKey, TValue> Head { get; set; }
+
+        public int MaxDegree
+        {
+            get
+            {
+                return _maxDegree;
+            }
+            protected set
+            {
+                if (value < 2)
+                {
+                    _maxDegree = 2;
+                }
+
+                else _maxDegree = value;
+            }
+        }
+
+        public double Alpha
+        {
+            get
+            {
+                return _alpha;
+            }
+            protected set
+            {
+                if (value > 0.5 || value <= 0)
+                {
+                    _alpha = 0.5;
+                }
+
+                else _alpha = value;
+            }
+        }
         public int Count { get; set; }
         public bool IsReadOnly { get; private set; }
 
 
 
 
-        public BTree(int maxDegree, int alpha)
+        public BPlusTree(int maxDegree, int alpha)
             : this(null, maxDegree, alpha)
         {
 
         }
 
-        public BTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, int alpha)
+        public BPlusTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, int alpha)
         {
             IsReadOnly = false;
 
