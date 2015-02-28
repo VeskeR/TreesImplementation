@@ -5,54 +5,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyTreesLib
+namespace MyBTreesLib
 {
-    public class BPlusTree<TKey, TValue> : IBTree<TKey, TValue> where TKey : IComparable<TKey>
+    public class BPlusTree<TKey, TValue> : IBTree<TKey, TValue, BPlusTreeNode<TKey, TValue>>
+        where TKey : IComparable<TKey>
     {
         private int _maxDegree;
         private double _alpha;
 
-        public BPlusTreeMainNode<TKey, TValue> Head { get; set; }
+        public BPlusTreeNode<TKey, TValue> Head { get; set; }
 
         public int MaxDegree
         {
-            get
-            {
-                return _maxDegree;
-            }
-            protected set
-            {
-                if (value < 2)
-                {
-                    _maxDegree = 2;
-                }
-
-                else _maxDegree = value;
-            }
+            get { return _maxDegree; }
+            protected set { _maxDegree = value < 2 ? 2 : value; }
         }
 
         public double Alpha
         {
-            get
-            {
-                return _alpha;
-            }
-            protected set
-            {
-                if (value > 0.5 || value <= 0)
-                {
-                    _alpha = 0.5;
-                }
-
-                else _alpha = value;
-            }
+            get { return _alpha; }
+            protected set { _alpha = (value <= 0.5 && value > 0) ? value : 0.5; }
         }
-        public int Count { get; set; }
-        public bool IsReadOnly { get; private set; }
+
+        public int Count { get; protected set; }
+        public bool IsReadOnly { get; protected set; }
 
 
 
-
+        public BPlusTree()
+            :this(null, 0, 0)
+        {
+            
+        }
         public BPlusTree(int maxDegree, int alpha)
             : this(null, maxDegree, alpha)
         {
@@ -68,21 +52,22 @@ namespace MyTreesLib
 
             if (collection != null)
             {
-                AddRange(collection);                
+                AddRange(collection);
             }
         }
 
-        
+
 
 
         public void Add(TKey key, TValue value)
         {
             Add(new KeyValuePair<TKey, TValue>(key, value));
         }
+
         //TODO
         public void Add(KeyValuePair<TKey, TValue> pair)
         {
-            
+
         }
 
         public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> collection)

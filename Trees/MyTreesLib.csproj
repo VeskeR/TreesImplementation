@@ -41,18 +41,18 @@
   <ItemGroup>
     <Compile Include="AVL Tree\AvlTree.cs" />
     <Compile Include="AVL Tree\AvlTreeNode.cs" />
-    <Compile Include="B-tree\BPlusTree.cs" />
-    <Compile Include="B-tree\BPlusTreeLeaf.cs" />
-    <Compile Include="B-tree\BPlusTreeMainNode.cs" />
-    <Compile Include="B-tree\IBTree.cs" />
-    <Compile Include="B-tree\IBTreeNode.cs" />
+    <Compile Include="B+-Tree\BPlusTree.cs" />
+    <Compile Include="B+-Tree\BPlusTreeLeaf.cs" />
+    <Compile Include="B+-Tree\BPlusTreeNode.cs" />
+    <Compile Include="Interfaces and abstract Classes\BTrees\IBTree.cs" />
+    <Compile Include="Interfaces and abstract Classes\BTrees\IBTreeNode.cs" />
     <Compile Include="Binary Search Tree\BinarySearchTreeNode.cs" />
     <Compile Include="Enums\Enums.cs" />
-    <Compile Include="Interfaces and abstract Classes\AbstractBinaryTree.cs" />
-    <Compile Include="Interfaces and abstract Classes\AbstractBinaryTreeNode.cs" />
+    <Compile Include="Interfaces and abstract Classes\Trees\AbstractBinaryTree.cs" />
+    <Compile Include="Interfaces and abstract Classes\Trees\AbstractBinaryTreeNode.cs" />
     <Compile Include="Binary Search Tree\BinarySearchTree.cs" />
-    <Compile Include="Interfaces and abstract Classes\ITree.cs" />
-    <Compile Include="Interfaces and abstract Classes\ITreeNode.cs" />
+    <Compile Include="Interfaces and abstract Classes\Trees\ITree.cs" />
+    <Compile Include="Interfaces and abstract Classes\Trees\ITreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
