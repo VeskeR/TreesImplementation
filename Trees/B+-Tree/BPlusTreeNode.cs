@@ -12,10 +12,12 @@ namespace MyBTreesLib
     public class BPlusTreeNode<TKey, TValue> :
         IBTreeNode<TKey, TValue, BPlusTreeNode<TKey, TValue>, BPlusTree<TKey, TValue>> where TKey : IComparable<TKey>
     {
-        protected List<BPlusTreeNode<TKey, TValue>> _links;
-        protected List<TKey> _keys;
+        protected BPlusTreeNodeSortedLinks<TKey, TValue> _links;
 
-        public List<BPlusTreeNode<TKey, TValue>> Links
+
+
+        //TODO
+        public BPlusTreeNodeSortedLinks<TKey, TValue> Links
         {
             get
             {
@@ -28,41 +30,34 @@ namespace MyBTreesLib
 
                 if (_links != null)
                 {
-                    int lc = _links.Count;
-
-                    for (int i = 0; i < lc - 1; i++)
+                    foreach (KeyValuePair<TKey, BPlusTreeNode<TKey, TValue>> pair in _links)
                     {
-                        _links[i].ParentNode = this;
-                        _links[i].NeighbourNode = _links[i + 1];
-                    }
-
-                    _links[lc - 1].ParentNode = this;
-
-                    if (lc > 1)
-                    {
-                        _links[lc - 1].NeighbourNode = _links[lc - 2];
+                        pair.Value.ParentNode = this;
                     }
                 }
             }
         }
 
-        public List<TKey> Keys
+        public BPlusTreeNodeSortedValues<TKey, TValue> Values { get; internal set; }
+
+        public int KeysCount
         {
             get
             {
-                return _keys; 
-            }
-            internal set
-            {
-                _keys = value;
+                if (this.IsLeaf)
+                {
+                    return this.Values.Keys.Count;
+                }
+
+                return this.Links.Keys.Count;
             }
         }
 
-        public SortedDictionary<TKey, TValue> Values { get; internal set; }
-
         public BPlusTreeNode<TKey, TValue> ParentNode { get; internal set; }
-        public BPlusTreeNode<TKey, TValue> NeighbourNode { get; internal set; }
-        public BPlusTreeNode<TKey, TValue> NextLeafNode { get; internal set; }
+        public BPlusTreeNode<TKey, TValue> RightNode { get; internal set; }
+        public BPlusTreeNode<TKey, TValue> LeftNode { get; internal set; } 
+        public BPlusTreeNode<TKey, TValue> RightLeafNode { get; internal set; }
+        public BPlusTreeNode<TKey, TValue> LeftLeafNode { get; internal set; } 
 
         public BPlusTree<TKey, TValue> ParentTree { get; internal set; }
 
@@ -76,35 +71,46 @@ namespace MyBTreesLib
             get { return ParentTree.Alpha; }
         }
 
+        public int MinDegree
+        {
+            get
+            {
+                return ParentTree.MinDegree;
+            }
+        }
+
         public bool IsLeaf { get; protected set; }
         public bool IsRoot { get; internal set; }
 
 
 
 
-        public BPlusTreeNode(List<TKey> keys, BPlusTreeNode<TKey, TValue> parentNode,
-            BPlusTreeNode<TKey, TValue> neighbour,
+        public BPlusTreeNode(BPlusTreeNodeSortedLinks<TKey, TValue> links, BPlusTreeNode<TKey, TValue> parentNode,
+            BPlusTreeNode<TKey, TValue> rightNode, BPlusTreeNode<TKey, TValue> leftNode,
             BPlusTree<TKey, TValue> parentTree, bool isRoot)
         {
-            Keys = keys;
+            Links = links;
             ParentNode = parentNode;
-            NeighbourNode = neighbour;
+            RightNode = rightNode;
+            LeftNode = leftNode;
             ParentTree = parentTree;
 
             IsLeaf = false;
             IsRoot = isRoot;
         }
 
-        public BPlusTreeNode(SortedDictionary<TKey, TValue> values, BPlusTreeNode<TKey, TValue> parentNode,
-            BPlusTreeNode<TKey, TValue> nextLeafNode, BPlusTree<TKey, TValue> parentTree)
+        public BPlusTreeNode(BPlusTreeNodeSortedValues<TKey, TValue> values, BPlusTreeNode<TKey, TValue> parentNode,
+            BPlusTreeNode<TKey, TValue> rightLeafNode, BPlusTreeNode<TKey, TValue> leftLeafNode,
+            BPlusTree<TKey, TValue> parentTree, bool isRoot)
         {
             Values = values;
             ParentNode = parentNode;
-            NextLeafNode = nextLeafNode;
+            RightLeafNode = rightLeafNode;
+            LeftLeafNode = leftLeafNode;
             ParentTree = parentTree;
 
             IsLeaf = true;
-            IsRoot = false;
+            IsRoot = isRoot;
         }
     }
 }

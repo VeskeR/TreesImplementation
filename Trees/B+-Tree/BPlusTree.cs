@@ -28,8 +28,33 @@ namespace MyBTreesLib
             protected set { _alpha = (value <= 0.5 && value > 0) ? value : 0.5; }
         }
 
+        public int MinDegree
+        {
+            get
+            {
+                return ((int) (MaxDegree*Alpha) > 0) ? (int) (MaxDegree*Alpha) : 1;
+            }
+        }
+
         public int Count { get; protected set; }
-        public bool IsReadOnly { get; protected set; }
+
+        public int KeysCount
+        {
+            get
+            {
+                return Count;
+            }
+        }
+
+        public int NodesCount { get; protected set; }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
 
 
 
@@ -46,8 +71,6 @@ namespace MyBTreesLib
         }
         public BPlusTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, int alpha)
         {
-            IsReadOnly = false;
-
             MaxDegree = maxDegree;
             Alpha = alpha;
 
@@ -68,7 +91,7 @@ namespace MyBTreesLib
 
                 while (!current.IsLeaf)
                 {
-                    current = current.Links[FindIndexOfLinkToGo(current, key)];
+                    current = current.Links.Values[FindIndexOfLinkToGo(current, key)];
                 }
 
                 return current;
@@ -79,15 +102,16 @@ namespace MyBTreesLib
 
         protected int FindIndexOfLinkToGo(BPlusTreeNode<TKey, TValue> node, TKey key)
         {
-            for (int i = 0; i < node.Keys.Count; i++)
+            for (int i = 0; i < node.Links.Count; i++)
             {
-                if (node.Keys[i].CompareTo(key) >= 0)
+                if (node.Links.Keys[i].CompareTo(key) >= 0)
                 {
                     return i;
                 }
             }
 
-            return node.Keys.Count;
+            //Если нужный ключ больше всех в даной ноде, тогда возвращается индекс последнего сына даного нода
+            return node.Links.Count - 1;
         }
 
         protected bool FindValueByKeyInLeaf(BPlusTreeNode<TKey, TValue> leaf, TKey key, out TValue value)
@@ -95,6 +119,140 @@ namespace MyBTreesLib
             return leaf.Values.TryGetValue(key, out value);
         }
 
+
+
+        protected void Split(BPlusTreeNode<TKey, TValue> nodeToSplit)
+        {
+            NodesCount++;
+
+            if (nodeToSplit.IsLeaf)
+            {
+                SplitLeaf(nodeToSplit);
+            }
+            else
+            {
+                SplitNode(nodeToSplit);
+            }
+        }
+
+        protected void SplitLeaf(BPlusTreeNode<TKey, TValue> leafToSplit)
+        {
+            int pivotIndex = leafToSplit.Values.Count / 2;
+
+            BPlusTreeNodeSortedValues<TKey, TValue> leftValues = new BPlusTreeNodeSortedValues<TKey, TValue>();
+            BPlusTreeNodeSortedValues<TKey, TValue> rightValues = new BPlusTreeNodeSortedValues<TKey, TValue>();
+
+            leafToSplit.Values.CopyTo(leftValues, 0, pivotIndex + 1);
+            leafToSplit.Values.CopyTo(rightValues, pivotIndex + 1, leafToSplit.Values.Count);
+
+            BPlusTreeNode<TKey, TValue> leftNode = new BPlusTreeNode<TKey, TValue>(leftValues,
+                leafToSplit.ParentNode, null, null, leafToSplit.ParentTree, false);
+            BPlusTreeNode<TKey, TValue> rightNode = new BPlusTreeNode<TKey, TValue>(rightValues,
+                leafToSplit.ParentNode, null, null, leafToSplit.ParentTree, false);
+
+            leftNode.RightLeafNode = rightNode;
+            leftNode.LeftLeafNode = leafToSplit.LeftLeafNode;
+
+            rightNode.LeftLeafNode = leftNode;
+            rightNode.RightLeafNode = leafToSplit.RightLeafNode;
+
+            if (leafToSplit.LeftLeafNode != null)
+            {
+                leafToSplit.LeftLeafNode.RightLeafNode = leftNode;
+            }
+            if (leafToSplit.RightLeafNode != null)
+            {
+                leafToSplit.RightLeafNode.LeftLeafNode = rightNode;
+            }
+
+
+
+            if (!leafToSplit.IsRoot)
+            {
+                leafToSplit.ParentNode.Links.Remove(leafToSplit.Values.Keys.Max());
+
+                leafToSplit.ParentNode.Links.Add(rightNode.Values.Keys.Last(), rightNode);
+                leafToSplit.ParentNode.Links.Add(leftNode.Values.Keys.Last(), leftNode);
+            }
+            else
+            {
+                BPlusTreeNode<TKey, TValue> newRoot =
+                    new BPlusTreeNode<TKey, TValue>(new BPlusTreeNodeSortedLinks<TKey, TValue>(), null, null, null,
+                        leafToSplit.ParentTree, true);
+
+                leftNode.ParentNode = newRoot;
+                rightNode.ParentNode = newRoot;
+
+                newRoot.Links.Add(leftNode.Values.Keys.Last(), leftNode);
+                newRoot.Links.Add(rightNode.Values.Keys.Last(), rightNode);
+
+                Head = newRoot;
+            }
+
+            if (leftNode.ParentNode.KeysCount > MaxDegree)
+            {
+                Split(leftNode.ParentNode);
+            }
+        }
+        protected void SplitNode(BPlusTreeNode<TKey, TValue> nodeToSplit)
+        {
+            int pivotIndex = nodeToSplit.Links.Count / 2;
+
+            BPlusTreeNodeSortedLinks<TKey, TValue> leftLinks = new BPlusTreeNodeSortedLinks<TKey, TValue>();
+            BPlusTreeNodeSortedLinks<TKey, TValue> rightLinks = new BPlusTreeNodeSortedLinks<TKey, TValue>();
+
+            nodeToSplit.Links.CopyTo(leftLinks, 0, pivotIndex + 1);
+            nodeToSplit.Links.CopyTo(rightLinks, pivotIndex + 1, nodeToSplit.Links.Count);
+
+            BPlusTreeNode<TKey, TValue> leftNode = new BPlusTreeNode<TKey, TValue>(leftLinks, nodeToSplit.ParentNode,
+                null, null, nodeToSplit.ParentTree, false);
+            BPlusTreeNode<TKey, TValue> rightNode = new BPlusTreeNode<TKey, TValue>(rightLinks, nodeToSplit.ParentNode,
+                null, null, nodeToSplit.ParentTree, false);
+
+            leftNode.RightNode = rightNode;
+            leftNode.LeftNode = nodeToSplit.LeftNode;
+
+            rightNode.LeftNode = leftNode;
+            rightNode.RightNode = nodeToSplit.RightNode;
+
+            if (nodeToSplit.LeftNode != null)
+            {
+                nodeToSplit.LeftNode.RightNode = leftNode;
+            }
+            if (nodeToSplit.RightNode != null)
+            {
+                nodeToSplit.RightNode.LeftNode = rightNode;
+            }
+
+
+
+            if (!nodeToSplit.IsRoot)
+            {
+                nodeToSplit.ParentNode.Links.Remove(nodeToSplit.Links.Keys.Max());
+
+                nodeToSplit.ParentNode.Links.Add(rightNode.Links.Keys.Last(), rightNode);
+                nodeToSplit.ParentNode.Links.Add(leftNode.Links.Keys.Last(), leftNode);
+            }
+            else
+            {
+                BPlusTreeNode<TKey, TValue> newRoot =
+                    new BPlusTreeNode<TKey, TValue>(new BPlusTreeNodeSortedLinks<TKey, TValue>(), null, null, null,
+                        nodeToSplit.ParentTree, true);
+
+                leftNode.ParentNode = newRoot;
+                rightNode.ParentNode = newRoot;
+
+                newRoot.Links.Add(leftNode.Links.Keys.Last(), leftNode);
+                newRoot.Links.Add(rightNode.Links.Keys.Last(), rightNode);
+
+                Head = newRoot;
+            }
+
+            if (leftNode.ParentNode.KeysCount > MaxDegree)
+            {
+                Split(leftNode.ParentNode);
+            }
+        }
 
 
         public void Add(TKey key, TValue value)
@@ -109,13 +267,53 @@ namespace MyBTreesLib
 
             if (current != null)
             {
-                if (current.Values.Count < MaxDegree)
+                if (current.Values.ContainsKey(pair.Key))
                 {
+                    throw new ArgumentException("An entry with the same key already exists.");                    
+                }
+
+
+                if (current.Values.Last().Key.CompareTo(pair.Key) < 0 && current.ParentNode != null)
+                {
+                    TKey oldKey = current.Values.Keys.Last();
                     current.Values.Add(pair.Key, pair.Value);
 
+                    //BPlusTreeNode<TKey, TValue> oldLinkValue;
+                    //current.ParentNode.Links.TryGetValue(oldKey, out oldLinkValue);
 
+                    current.ParentNode.Links.Remove(oldKey);
+                    current.ParentNode.Links.Add(pair.Key, current);
+
+                    BPlusTreeNode<TKey, TValue> parent = current.ParentNode;
+
+                    while (parent.ParentNode != null)
+                    {
+                        parent.ParentNode.Links.Remove(oldKey);
+                        parent.ParentNode.Links.Add(pair.Key, parent);
+
+                        parent = parent.ParentNode;
+                    }
+                }
+                else
+                {
+                    current.Values.Add(pair.Key, pair.Value);
+                }
+
+                if (current.KeysCount > MaxDegree)
+                {
+                    Split(current);
                 }
             }
+            else
+            {
+                BPlusTreeNodeSortedValues<TKey, TValue> list = new BPlusTreeNodeSortedValues<TKey, TValue>();
+                list.Add(pair.Key, pair.Value);
+                Head = new BPlusTreeNode<TKey, TValue>(list, null, null, null, this, true);
+
+                NodesCount++;
+            }
+
+            Count++;
         }
 
         public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> collection)
@@ -131,6 +329,7 @@ namespace MyBTreesLib
         public void Clear()
         {
             Count = 0;
+            NodesCount = 0;
             Head = null;
         }
         //TODO
@@ -145,7 +344,7 @@ namespace MyBTreesLib
         {
             BPlusTreeNode<TKey, TValue> leaf = FindLeafThatMightContainKey(key);
 
-            if (FindValueByKeyInLeaf(leaf, key, out value))
+            if (leaf != null && FindValueByKeyInLeaf(leaf, key, out value))
             {
                 return true;
             }
@@ -176,7 +375,7 @@ namespace MyBTreesLib
 
                 while (!current.IsLeaf)
                 {
-                    current = current.Links[0];
+                    current = current.Links.Values[0];
                 }
 
                 do
@@ -186,7 +385,7 @@ namespace MyBTreesLib
                         array[arrayIndex++] = pair;
                     }
 
-                    current = current.NextLeafNode;
+                    current = current.RightLeafNode;
                 } while (current != null);
             }
         }
@@ -201,7 +400,7 @@ namespace MyBTreesLib
 
                 while (!current.IsLeaf)
                 {
-                    current = current.Links[0];
+                    current = current.Links.Values[0];
                 }
 
                 do
@@ -211,7 +410,7 @@ namespace MyBTreesLib
                         yield return pair;
                     }
 
-                    current = current.NextLeafNode;
+                    current = current.RightLeafNode;
                 } while (current != null);
             }
         }

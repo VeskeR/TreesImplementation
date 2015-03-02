@@ -33,7 +33,7 @@ namespace MyTreesLib
             }
             else
             {
-                AddTo(Head, value, true);
+                _add(value, true);
             }
 
             Count++;
@@ -47,7 +47,7 @@ namespace MyTreesLib
             }
             else
             {
-                AddTo(Head, value, false);
+                _add(value, false);
             }
 
             Count++;
@@ -61,32 +61,42 @@ namespace MyTreesLib
             }
         }
 
-        protected void AddTo(AvlTreeNode<T> node, T value, bool balance)
+        protected void _add(T value, bool balance)
         {
-            if (value.CompareTo(node.Value) < 0)
+            AvlTreeNode<T> current = Head;
+
+            while (true)
             {
-                if (node.Left == null)
+                if (value.CompareTo(current.Value) < 0)
                 {
-                    node.Left = new AvlTreeNode<T>(value, node, this);
+                    if (current.Left == null)
+                    {
+                        current.Left = new AvlTreeNode<T>(value, current, this);
+                        break;
+                    }
+
+                    current = current.Left;
                 }
                 else
                 {
-                    AddTo(node.Left, value, balance);
-                }
-            }
-            else
-            {
-                if (node.Right == null)
-                {
-                    node.Right = new AvlTreeNode<T>(value, node, this);
-                }
-                else
-                {
-                    AddTo(node.Right, value, balance);
-                }
+                    if (current.Right == null)
+                    {
+                        current.Right = new AvlTreeNode<T>(value, current, this);
+                        break;
+                    }
+
+                    current = current.Right;
+                } 
             }
 
-            if (balance) node.Balance();
+            if (balance)
+            {
+                while (current != null)
+                {
+                    current.Balance();
+                    current = current.Parent;
+                }
+            }
         }
 
 

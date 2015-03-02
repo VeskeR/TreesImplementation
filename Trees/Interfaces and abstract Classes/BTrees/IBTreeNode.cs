@@ -8,15 +8,15 @@ namespace MyBTreesLib
 {
     internal interface IBTreeNode<TKey, TValue, TBTreeNode, TBTree> where TKey : IComparable<TKey>
     {
-        List<TBTreeNode> Links { get; }
-        SortedDictionary<TKey, TValue> Values { get; }
-
+        BPlusTreeNodeSortedLinks<TKey, TValue> Links { get; }
+        BPlusTreeNodeSortedValues<TKey, TValue> Values { get; }
 
         TBTreeNode ParentNode { get; }
         TBTree ParentTree { get; }
 
         int MaxDegree { get; }
         double Alpha { get; }
+        int MinDegree { get; }
 
         bool IsLeaf { get; }
         bool IsRoot { get; }

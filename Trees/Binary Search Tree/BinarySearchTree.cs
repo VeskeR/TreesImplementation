@@ -37,36 +37,34 @@ namespace MyTreesLib
             }
             else
             {
-                AddTo(Head, value);
+                BinarySearchTreeNode<T> current = Head;
+
+                while (true)
+                {
+                    if (value.CompareTo(current.Value) < 0)
+                    {
+                        if (current.Left == null)
+                        {
+                            current.Left = new BinarySearchTreeNode<T>(value);
+                            break;
+                        }
+
+                        current = current.Left;
+                    }
+                    else
+                    {
+                        if (current.Right == null)
+                        {
+                            current.Right = new BinarySearchTreeNode<T>(value);
+                            break;
+                        }
+
+                        current = current.Right;
+                    } 
+                }
             }
 
             Count++;
-        }
-
-        protected void AddTo(BinarySearchTreeNode<T> node, T value)
-        {
-            if (value.CompareTo(node.Value) < 0)
-            {
-                if (node.Left == null)
-                {
-                    node.Left = new BinarySearchTreeNode<T>(value);
-                }
-                else
-                {
-                    AddTo(node.Left, value);
-                }
-            }
-            else
-            {
-                if (node.Right == null)
-                {
-                    node.Right = new BinarySearchTreeNode<T>(value);
-                }
-                else
-                {
-                    AddTo(node.Right, value);
-                }
-            }
         }
 
 

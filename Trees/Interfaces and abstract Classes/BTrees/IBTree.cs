@@ -13,6 +13,10 @@ namespace MyBTreesLib
 
         int MaxDegree { get; }
         double Alpha { get; }
+        int MinDegree { get; }
+
+        int KeysCount { get; }
+        int NodesCount { get; }
 
 
 
