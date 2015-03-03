@@ -15,8 +15,6 @@ namespace MyBTreesLib
         protected BPlusTreeNodeSortedLinks<TKey, TValue> _links;
 
 
-
-        //TODO
         public BPlusTreeNodeSortedLinks<TKey, TValue> Links
         {
             get

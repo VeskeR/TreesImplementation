@@ -15,24 +15,19 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            BPlusTree<int, int> bTree = new BPlusTree<int, int>(10, 0.5);
+            BPlusTree<int, int> bTree = new BPlusTree<int, int>(1000, 0.5);
 
-            bTree.Add(4, 4);
-            bTree.Add(3, 3);
-            bTree.Add(2, 2);
-            bTree.Add(5, 5);
-            bTree.Add(6, 6);
-            bTree.Add(7, 7);
-            bTree.Add(8, 8);
-            bTree.Add(10, 10);
-            bTree.Add(11, 11);
-            bTree.Add(9, 9);
-            bTree.Add(1,1);
-            
-           
-            
+            for (int i = 0; i < 20; i++)
+            {
+                bTree.Add(i, i);
+            }
 
-            foreach (var pair in bTree)
+            for (int i = 0; i < 15; i++)
+            {
+                bTree.Remove(i);
+            }
+
+            foreach (KeyValuePair<int, int> pair in bTree)
             {
                 Console.WriteLine(pair);
             }

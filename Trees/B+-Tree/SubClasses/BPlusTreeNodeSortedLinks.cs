@@ -28,6 +28,15 @@ namespace MyBTreesLib
 
 
 
+        public void AddRange(BPlusTreeNode<TKey, TValue> parent,
+            IEnumerable<KeyValuePair<TKey, BPlusTreeNode<TKey, TValue>>> collection)
+        {
+            foreach (KeyValuePair<TKey, BPlusTreeNode<TKey, TValue>> pair in collection)
+            {
+                this.Add(pair.Key, pair.Value);
+                pair.Value.ParentNode = parent;
+            }
+        }
 
         public void AddRangeToEnd(BPlusTreeNode<TKey, TValue> parent,
             IEnumerable<KeyValuePair<TKey, BPlusTreeNode<TKey, TValue>>> collection)
@@ -88,11 +97,11 @@ namespace MyBTreesLib
 
 
 
-        public void CopyTo(BPlusTreeNodeSortedLinks<TKey, TValue> links, int indexFrom, int indexTo)
+        public void CopyTo(BPlusTreeNodeSortedLinks<TKey, TValue> links, int copyFromIndex, int copyToIndex)
         {
             try
             {
-                for (int i = indexFrom; i < indexTo; i++)
+                for (int i = copyFromIndex; i < copyToIndex; i++)
                 {
                     links.Add(this.Keys[i], this.Values[i]);
                 }

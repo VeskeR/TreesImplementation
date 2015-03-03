@@ -19,7 +19,7 @@ namespace MyBTreesLib
         public int MaxDegree
         {
             get { return _maxDegree; }
-            protected set { _maxDegree = value < 2 ? 2 : value; }
+            protected set { _maxDegree = value < 4 ? 4 : value; }
         }
 
         public double Alpha
@@ -32,7 +32,7 @@ namespace MyBTreesLib
         {
             get
             {
-                return ((int) (MaxDegree*Alpha) > 0) ? (int) (MaxDegree*Alpha) : 1;
+                return ((int) (MaxDegree*Alpha) >= 2) ? (int) (MaxDegree*Alpha) : 2;
             }
         }
 
@@ -381,6 +381,10 @@ namespace MyBTreesLib
                 {
                     leaf.IsRoot = true;
                     leaf.ParentNode = null;
+
+                    Head = leaf;
+
+                    NodesCount--;
                 }
             }
         }
@@ -439,6 +443,10 @@ namespace MyBTreesLib
                 {
                     node.IsRoot = true;
                     node.ParentNode = null;
+
+                    Head = node;
+
+                    NodesCount--;
                 }
             }
         }
@@ -446,21 +454,205 @@ namespace MyBTreesLib
         protected void MergeLeaves(BPlusTreeNode<TKey, TValue> leftLeafToMerge,
             BPlusTreeNode<TKey, TValue> rightLeafToMerge)
         {
+            NodesCount--;
 
+            BPlusTreeNode<TKey, TValue> newLeaf =
+                new BPlusTreeNode<TKey, TValue>(new BPlusTreeNodeSortedValues<TKey, TValue>(), null, null, null,
+                    leftLeafToMerge.ParentTree, false);
+
+            BPlusTreeNodeSortedValues<TKey, TValue> mergedValues = new BPlusTreeNodeSortedValues<TKey, TValue>();
+
+            mergedValues.AddRange(leftLeafToMerge.Values);
+            mergedValues.AddRange(rightLeafToMerge.Values);
+
+            newLeaf.Values = mergedValues;
+
+            newLeaf.ParentNode = rightLeafToMerge.ParentNode;
+
+            newLeaf.LeftLeafNode = leftLeafToMerge.LeftLeafNode;
+            newLeaf.RightLeafNode = rightLeafToMerge.RightLeafNode;
+
+            if (newLeaf.LeftLeafNode != null)
+            {
+                newLeaf.LeftLeafNode.RightLeafNode = newLeaf;
+            }
+            if (newLeaf.RightLeafNode != null)
+            {
+                newLeaf.RightLeafNode.LeftLeafNode = newLeaf;
+            }
+
+            newLeaf.ParentNode.Links.Remove(rightLeafToMerge.Values.Keys.Max());
+            newLeaf.ParentNode.Links.Add(newLeaf.Values.Keys.Max(), newLeaf);
+
+            leftLeafToMerge.ParentNode.Links.Remove(leftLeafToMerge.Values.Keys.Max());
+
+            if (leftLeafToMerge.ParentNode != rightLeafToMerge.ParentNode)
+            {
+                leftLeafToMerge.ParentNode.ParentNode.Links.Remove(leftLeafToMerge.Values.Keys.Max());
+                leftLeafToMerge.ParentNode.ParentNode.Links.Add(leftLeafToMerge.ParentNode.Links.Keys.Max(),
+                    leftLeafToMerge.ParentNode);
+
+                if (leftLeafToMerge.ParentNode.KeysCount < MinDegree && !leftLeafToMerge.ParentNode.IsRoot)
+                {
+                    MergeOrPullNode(leftLeafToMerge.ParentNode);
+                }
+            }
+
+            if (newLeaf.ParentNode.KeysCount < MinDegree && !newLeaf.ParentNode.IsRoot)
+            {
+                MergeOrPullNode(newLeaf.ParentNode);
+            }
+            else if (newLeaf.ParentNode.IsRoot && newLeaf.ParentNode.KeysCount == 1)
+            {
+                newLeaf.IsRoot = true;
+                newLeaf.ParentNode = null;
+
+                Head = newLeaf;
+
+                NodesCount--;
+            }
         }
         protected void MergeNodes(BPlusTreeNode<TKey, TValue> leftNodeToMerge,
             BPlusTreeNode<TKey, TValue> rightNodeToMerge)
         {
+            NodesCount--;
 
+            BPlusTreeNode<TKey, TValue> newNode =
+                new BPlusTreeNode<TKey, TValue>(new BPlusTreeNodeSortedLinks<TKey, TValue>(), null, null, null,
+                    leftNodeToMerge.ParentTree, false);
+
+            BPlusTreeNodeSortedLinks<TKey, TValue> mergedLinks = new BPlusTreeNodeSortedLinks<TKey, TValue>();
+
+            mergedLinks.AddRange(newNode, leftNodeToMerge.Links);
+            mergedLinks.AddRange(newNode, rightNodeToMerge.Links);
+
+            newNode.Links = mergedLinks;
+
+            newNode.ParentNode = rightNodeToMerge.ParentNode;
+
+            newNode.LeftNode = leftNodeToMerge.LeftNode;
+            newNode.RightNode = rightNodeToMerge.RightNode;
+
+            if (newNode.RightNode != null)
+            {
+                newNode.RightNode.LeftNode = newNode;
+            }
+            if (newNode.LeftNode != null)
+            {
+                newNode.LeftNode.RightNode = newNode;
+            }
+
+            newNode.ParentNode.Links.Remove(rightNodeToMerge.Links.Keys.Max());
+            newNode.ParentNode.Links.Add(newNode.Links.Keys.Max(), newNode);
+
+            leftNodeToMerge.ParentNode.Links.Remove(leftNodeToMerge.Links.Keys.Max());
+
+            if (leftNodeToMerge.ParentNode != rightNodeToMerge.ParentNode)
+            {
+                leftNodeToMerge.ParentNode.ParentNode.Links.Remove(leftNodeToMerge.Links.Keys.Max());
+                leftNodeToMerge.ParentNode.ParentNode.Links.Add(leftNodeToMerge.ParentNode.Links.Keys.Max(),
+                    leftNodeToMerge.ParentNode);
+
+                if (leftNodeToMerge.ParentNode.KeysCount < MinDegree && !leftNodeToMerge.ParentNode.IsRoot)
+                {
+                    MergeOrPullNode(leftNodeToMerge.ParentNode);
+                }
+            }
+
+            if (newNode.ParentNode.KeysCount < MinDegree && !newNode.ParentNode.IsRoot)
+            {
+                MergeOrPullNode(newNode.ParentNode);
+            }
+            else if (newNode.ParentNode.IsRoot && newNode.ParentNode.KeysCount == 1)
+            {
+                newNode.IsRoot = true;
+                newNode.ParentNode = null;
+
+                Head = newNode;
+
+                NodesCount--;
+            }
         }
 
         protected void PullLeaves(BPlusTreeNode<TKey, TValue> leafToPull, BPlusTreeNode<TKey, TValue> leafFromPull)
         {
-            
+            int numberOfValuesToPull = leafToPull.KeysCount + (leafFromPull.KeysCount - leafToPull.KeysCount)/2;
+
+            if (leafToPull.RightLeafNode == leafFromPull)
+            {
+                BPlusTreeNodeSortedValues<TKey, TValue> pulledValues = new BPlusTreeNodeSortedValues<TKey, TValue>();
+
+                for (int i = 0; i < numberOfValuesToPull; i++)
+                {
+                    pulledValues.Add(leafFromPull.Values.Keys[0], leafFromPull.Values.Values[0]);
+                    leafFromPull.Values.RemoveAt(0);
+                }
+
+                TKey oldKey = leafToPull.Values.Keys.Max();
+
+                leafToPull.Values.AddRange(pulledValues);
+
+                leafToPull.ParentNode.Links.Remove(oldKey);
+                leafToPull.ParentNode.Links.Add(leafToPull.Values.Keys.Max(), leafToPull);
+            }
+            else
+            {
+                BPlusTreeNodeSortedValues<TKey, TValue> pulledValues = new BPlusTreeNodeSortedValues<TKey, TValue>();
+
+                TKey oldKey = leafFromPull.Values.Keys.Max();
+
+                for (int i = 0; i < numberOfValuesToPull; i++)
+                {
+                    pulledValues.Add(leafFromPull.Values.Keys[leafFromPull.KeysCount - 1],
+                        leafFromPull.Values.Values[leafFromPull.KeysCount - 1]);
+                    leafFromPull.Values.RemoveAt(leafFromPull.KeysCount - 1);
+                }
+
+                leafToPull.Values.AddRange(pulledValues);
+
+                leafFromPull.ParentNode.Links.Remove(oldKey);
+                leafFromPull.ParentNode.Links.Add(leafFromPull.Values.Keys.Max(), leafFromPull);
+            }
         }
         protected void PullNodes(BPlusTreeNode<TKey, TValue> nodeToPull, BPlusTreeNode<TKey, TValue> nodeFromPull)
         {
-            
+            int numberOfLinksToPull = nodeToPull.KeysCount + (nodeFromPull.KeysCount - nodeToPull.KeysCount) / 2;
+
+            if (nodeToPull.RightNode == nodeFromPull)
+            {
+                BPlusTreeNodeSortedLinks<TKey, TValue> pulledLinks = new BPlusTreeNodeSortedLinks<TKey, TValue>();
+
+                for (int i = 0; i < numberOfLinksToPull; i++)
+                {
+                    pulledLinks.Add(nodeFromPull.Links.Keys[0], nodeFromPull.Links.Values[0]);
+                    nodeFromPull.Links.RemoveAt(0);
+                }
+
+                TKey oldKey = nodeToPull.Links.Keys.Max();
+
+                nodeToPull.Links.AddRange(nodeToPull, pulledLinks);
+
+                nodeToPull.ParentNode.Links.Remove(oldKey);
+                nodeToPull.ParentNode.Links.Add(nodeToPull.Links.Keys.Max(), nodeToPull);
+            }
+            else
+            {
+                BPlusTreeNodeSortedLinks<TKey, TValue> pulledLinks = new BPlusTreeNodeSortedLinks<TKey, TValue>();
+
+                TKey oldKey = nodeFromPull.Links.Keys.Max();
+
+                for (int i = 0; i < numberOfLinksToPull; i++)
+                {
+                    pulledLinks.Add(nodeFromPull.Links.Keys[nodeFromPull.KeysCount - 1],
+                        nodeFromPull.Links.Values[nodeFromPull.KeysCount - 1]);
+                    nodeFromPull.Links.RemoveAt(nodeFromPull.KeysCount - 1);
+                }
+
+                nodeToPull.Links.AddRange(nodeToPull, pulledLinks);
+
+                nodeFromPull.ParentNode.Links.Remove(oldKey);
+                nodeFromPull.ParentNode.Links.Add(nodeFromPull.Values.Keys.Max(), nodeFromPull);
+            }
         }
 
 
@@ -473,6 +665,8 @@ namespace MyBTreesLib
             {
                 if (current.Values.ContainsKey(key))
                 {
+                    Count--;
+
                     if (current.Values.Keys.Max().CompareTo(key) == 0 && current.ParentNode != null)
                     {
                         current.Values.Remove(key);
@@ -482,7 +676,8 @@ namespace MyBTreesLib
 
                         BPlusTreeNode<TKey, TValue> parent = current.ParentNode;
 
-                        while (parent.ParentNode != null)
+                        while (parent.Links.Keys.Max().CompareTo(current.Values.Keys.Max()) == 0 &&
+                               parent.ParentNode != null)
                         {
                             parent.ParentNode.Links.Remove(key);
                             parent.ParentNode.Links.Add(current.Values.Keys.Max(), parent);

@@ -8,11 +8,21 @@ namespace MyBTreesLib
 {
     public class BPlusTreeNodeSortedValues<TKey, TValue> : SortedList<TKey, TValue> where TKey : IComparable<TKey>
     {
-        public void CopyTo(BPlusTreeNodeSortedValues<TKey, TValue> links, int indexFrom, int indexTo)
+        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> values)
+        {
+            foreach (KeyValuePair<TKey, TValue> pair in values)
+            {
+                this.Add(pair.Key, pair.Value);
+            }
+        }
+
+
+
+        public void CopyTo(BPlusTreeNodeSortedValues<TKey, TValue> links, int copyFromIndex, int copyToIndex)
         {
             try
             {
-                for (int i = indexFrom; i < indexTo; i++)
+                for (int i = copyFromIndex; i < copyToIndex; i++)
                 {
                     links.Add(this.Keys[i], this.Values[i]);
                 }
