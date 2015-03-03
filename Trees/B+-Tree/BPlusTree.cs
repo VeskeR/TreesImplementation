@@ -64,12 +64,12 @@ namespace MyBTreesLib
         {
             
         }
-        public BPlusTree(int maxDegree, int alpha)
+        public BPlusTree(int maxDegree, double alpha)
             : this(null, maxDegree, alpha)
         {
 
         }
-        public BPlusTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, int alpha)
+        public BPlusTree(IEnumerable<KeyValuePair<TKey, TValue>> collection, int maxDegree, double alpha)
         {
             MaxDegree = maxDegree;
             Alpha = alpha;
@@ -187,6 +187,8 @@ namespace MyBTreesLib
                 newRoot.Links.Add(rightNode.Values.Keys.Last(), rightNode);
 
                 Head = newRoot;
+
+                NodesCount++;
             }
 
             if (leftNode.ParentNode.KeysCount > MaxDegree)
@@ -246,6 +248,8 @@ namespace MyBTreesLib
                 newRoot.Links.Add(rightNode.Links.Keys.Last(), rightNode);
 
                 Head = newRoot;
+
+                NodesCount++;
             }
 
             if (leftNode.ParentNode.KeysCount > MaxDegree)
@@ -255,12 +259,19 @@ namespace MyBTreesLib
         }
 
 
+
         public void Add(TKey key, TValue value)
         {
             Add(new KeyValuePair<TKey, TValue>(key, value));
         }
+        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+        {
+            foreach (KeyValuePair<TKey, TValue> pair in collection)
+            {
+                Add(pair);
+            }
+        }
 
-        //TODO
         public void Add(KeyValuePair<TKey, TValue> pair)
         {
             BPlusTreeNode<TKey, TValue> current = FindLeafThatMightContainKey(pair.Key);
@@ -277,9 +288,6 @@ namespace MyBTreesLib
                 {
                     TKey oldKey = current.Values.Keys.Last();
                     current.Values.Add(pair.Key, pair.Value);
-
-                    //BPlusTreeNode<TKey, TValue> oldLinkValue;
-                    //current.ParentNode.Links.TryGetValue(oldKey, out oldLinkValue);
 
                     current.ParentNode.Links.Remove(oldKey);
                     current.ParentNode.Links.Add(pair.Key, current);
@@ -316,14 +324,205 @@ namespace MyBTreesLib
             Count++;
         }
 
-        public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+
+
+        protected void MergeOrPullLeaf(BPlusTreeNode<TKey, TValue> leaf)
         {
-            foreach (KeyValuePair<TKey, TValue> pair in collection)
+            if (leaf.RightLeafNode != null && leaf.LeftLeafNode != null)
             {
-                Add(pair);
+                BPlusTreeNode<TKey, TValue> minLeaf = (leaf.LeftLeafNode.KeysCount < leaf.RightLeafNode.KeysCount)
+                ? leaf.LeftLeafNode
+                : leaf.RightLeafNode;
+                BPlusTreeNode<TKey, TValue> maxLeaf = (leaf.LeftLeafNode.KeysCount >= leaf.RightLeafNode.KeysCount)
+                    ? leaf.LeftLeafNode
+                    : leaf.RightLeafNode;
+
+                if (leaf.KeysCount + minLeaf.KeysCount <= MaxDegree)
+                {
+                    if (leaf.RightLeafNode == minLeaf)
+                    {
+                        MergeLeaves(leaf, minLeaf);
+                    }
+                    else
+                    {
+                        MergeLeaves(minLeaf, leaf);
+                    }
+                }
+                else
+                {
+                    PullLeaves(leaf, maxLeaf);                    
+                }
+            }
+            else if (leaf.LeftLeafNode != null)
+            {
+                if (leaf.KeysCount + leaf.LeftLeafNode.KeysCount <= MaxDegree)
+                {
+                    MergeLeaves(leaf.LeftLeafNode, leaf);
+                }
+                else
+                {
+                    PullLeaves(leaf, leaf.LeftLeafNode);
+                }
+            }
+            else if (leaf.RightLeafNode != null)
+            {
+                if (leaf.KeysCount + leaf.RightLeafNode.KeysCount <= MaxDegree)
+                {
+                    MergeLeaves(leaf, leaf.RightLeafNode);
+                }
+                else
+                {
+                    PullLeaves(leaf, leaf.RightLeafNode);
+                }
+            }
+            else
+            {
+                if (!leaf.IsRoot)
+                {
+                    leaf.IsRoot = true;
+                    leaf.ParentNode = null;
+                }
+            }
+        }
+        protected void MergeOrPullNode(BPlusTreeNode<TKey, TValue> node)
+        {
+            if (node.RightNode != null && node.LeftNode != null)
+            {
+                BPlusTreeNode<TKey, TValue> minNode = (node.LeftNode.KeysCount < node.RightNode.KeysCount)
+                ? node.LeftNode
+                : node.RightNode;
+                BPlusTreeNode<TKey, TValue> maxNode = (node.LeftNode.KeysCount >= node.RightNode.KeysCount)
+                    ? node.LeftNode
+                    : node.RightNode;
+
+                if (node.KeysCount + minNode.KeysCount <= MaxDegree)
+                {
+                    if (node.RightNode == minNode)
+                    {
+                        MergeNodes(node, minNode);
+                    }
+                    else
+                    {
+                        MergeNodes(minNode, node);
+                    }
+                }
+                else
+                {
+                    PullNodes(node, maxNode);
+                }
+            }
+            else if (node.LeftNode != null)
+            {
+                if (node.KeysCount + node.LeftNode.KeysCount <= MaxDegree)
+                {
+                    MergeNodes(node.LeftNode, node);
+                }
+                else
+                {
+                    PullNodes(node, node.LeftNode);
+                }
+            }
+            else if (node.RightNode != null)
+            {
+                if (node.KeysCount + node.RightNode.KeysCount <= MaxDegree)
+                {
+                    MergeNodes(node, node.RightNode);
+                }
+                else
+                {
+                    PullNodes(node, node.RightNode);
+                }
+            }
+            else
+            {
+                if (!node.IsRoot)
+                {
+                    node.IsRoot = true;
+                    node.ParentNode = null;
+                }
             }
         }
 
+        protected void MergeLeaves(BPlusTreeNode<TKey, TValue> leftLeafToMerge,
+            BPlusTreeNode<TKey, TValue> rightLeafToMerge)
+        {
+
+        }
+        protected void MergeNodes(BPlusTreeNode<TKey, TValue> leftNodeToMerge,
+            BPlusTreeNode<TKey, TValue> rightNodeToMerge)
+        {
+
+        }
+
+        protected void PullLeaves(BPlusTreeNode<TKey, TValue> leafToPull, BPlusTreeNode<TKey, TValue> leafFromPull)
+        {
+            
+        }
+        protected void PullNodes(BPlusTreeNode<TKey, TValue> nodeToPull, BPlusTreeNode<TKey, TValue> nodeFromPull)
+        {
+            
+        }
+
+
+
+        public bool Remove(TKey key)
+        {
+            BPlusTreeNode<TKey, TValue> current = FindLeafThatMightContainKey(key);
+
+            if (current != null)
+            {
+                if (current.Values.ContainsKey(key))
+                {
+                    if (current.Values.Keys.Max().CompareTo(key) == 0 && current.ParentNode != null)
+                    {
+                        current.Values.Remove(key);
+
+                        current.ParentNode.Links.Remove(key);
+                        current.ParentNode.Links.Add(current.Values.Keys.Max(), current);
+
+                        BPlusTreeNode<TKey, TValue> parent = current.ParentNode;
+
+                        while (parent.ParentNode != null)
+                        {
+                            parent.ParentNode.Links.Remove(key);
+                            parent.ParentNode.Links.Add(current.Values.Keys.Max(), parent);
+
+                            parent = parent.ParentNode;
+                        }
+                    }
+                    else
+                    {
+                        current.Values.Remove(key);
+                    }
+
+                    if (current.KeysCount < MinDegree && !current.IsRoot)
+                    {
+                        if (current.IsLeaf)
+                        {
+                            MergeOrPullLeaf(current);
+                        }
+                        else
+                        {
+                            MergeOrPullNode(current);
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public bool Remove(KeyValuePair<TKey, TValue> pair)
+        {
+            if (Contains(pair))
+            {
+                Remove(pair.Key);
+                return true;
+            }
+
+            return false;
+        }
 
 
         public void Clear()
@@ -331,11 +530,6 @@ namespace MyBTreesLib
             Count = 0;
             NodesCount = 0;
             Head = null;
-        }
-        //TODO
-        public bool Remove(KeyValuePair<TKey, TValue> item)
-        {
-            throw new NotImplementedException();
         }
 
 

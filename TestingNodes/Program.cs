@@ -15,7 +15,7 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
-            BPlusTree<int, int> bTree = new BPlusTree<int, int>();
+            BPlusTree<int, int> bTree = new BPlusTree<int, int>(10, 0.5);
 
             bTree.Add(4, 4);
             bTree.Add(3, 3);
@@ -24,6 +24,8 @@ namespace TestingNodes
             bTree.Add(6, 6);
             bTree.Add(7, 7);
             bTree.Add(8, 8);
+            bTree.Add(10, 10);
+            bTree.Add(11, 11);
             bTree.Add(9, 9);
             bTree.Add(1,1);
             
