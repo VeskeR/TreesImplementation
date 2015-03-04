@@ -651,7 +651,7 @@ namespace MyBTreesLib
                 nodeToPull.Links.AddRange(nodeToPull, pulledLinks);
 
                 nodeFromPull.ParentNode.Links.Remove(oldKey);
-                nodeFromPull.ParentNode.Links.Add(nodeFromPull.Values.Keys.Max(), nodeFromPull);
+                nodeFromPull.ParentNode.Links.Add(nodeFromPull.Links.Keys.Max(), nodeFromPull);
             }
         }
 

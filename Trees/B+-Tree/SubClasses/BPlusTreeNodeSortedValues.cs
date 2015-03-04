@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyBTreesLib
 {
+    [Serializable]
     public class BPlusTreeNodeSortedValues<TKey, TValue> : SortedList<TKey, TValue> where TKey : IComparable<TKey>
     {
         public void AddRange(IEnumerable<KeyValuePair<TKey, TValue>> values)

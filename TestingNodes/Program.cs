@@ -18,6 +18,8 @@ namespace TestingNodes
     {
         static void Main(string[] args)
         {
+            int j = 0;
+
             Random rand = new Random();
             Stopwatch sw = new Stopwatch();
 
@@ -36,85 +38,94 @@ namespace TestingNodes
 
             Console.Clear();
 
-
-            sw.Reset();
-            sw.Start();
-            for (int i = 0; i < count; i++)
+            if (Console.ReadLine().ToLower() == "y")
             {
-                tree.Add(i*10, i*10);
-            }
-            sw.Stop();
-            Console.WriteLine("Adding ascending sequence takes {0:f3} s", (double) sw.ElapsedMilliseconds / 1000);
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Add(i * 10, i * 10);
+                }
+                sw.Stop();
+                Console.WriteLine("Adding ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
 
 
-            sw.Reset();
-            sw.Start();
-            int j = 0;
-            for (int i = 0; i < count; i++)
-            {
-                tree.Find(rand.Next(count), out j);
-            }
-            sw.Stop();
-            Console.WriteLine("Finding in ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Find(rand.Next(count), out j);
+                }
+                sw.Stop();
+                Console.WriteLine("Finding in ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
+
+                GetObjectSize(tree);
 
 
-            sw.Reset();
-            sw.Start();
-            for (int i = 0; i < count; i++)
-            {
-                tree.Remove(i*10);
-            }
-            sw.Stop();
-            Console.WriteLine("Removing from ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
-
-
-
-            List<int> elements = new List<int>();
-            for (int i = 0; i < count; i++)
-            {
-                elements.Add(i*10);
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Remove(i * 10);
+                }
+                sw.Stop();
+                Console.WriteLine("Removing from ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
             }
 
-            Sort<int>.SortOut(elements);
-            Sort<int>.SortOut(elements);
-            Sort<int>.SortOut(elements);
-            Sort<int>.SortOut(elements);
-            Sort<int>.SortOut(elements);
 
-            sw.Reset();
-            sw.Start();
-            for (int i = 0; i < count; i++)
+
+            if (Console.ReadLine().ToLower() == "y")
             {
-                tree.Add(elements[i], elements[i]);
+                List<int> elements = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    elements.Add(i * 10);
+                }
+
+                Sort<int>.SortOut(elements);
+                Sort<int>.SortOut(elements);
+                Sort<int>.SortOut(elements);
+                Sort<int>.SortOut(elements);
+                Sort<int>.SortOut(elements);
+
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Add(elements[i], elements[i]);
+                }
+                sw.Stop();
+                Console.WriteLine("Adding random sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
+
+
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Find(rand.Next(count), out j);
+                }
+                sw.Stop();
+                Console.WriteLine("Finding in ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
+
+                GetObjectSize(tree);
+
+
+                sw.Reset();
+                sw.Start();
+                for (int i = 0; i < count; i++)
+                {
+                    tree.Remove(elements[i]);
+                }
+                sw.Stop();
+                Console.WriteLine("Removing from ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
+
+
+
+
+
+                Console.ReadLine();
             }
-            sw.Stop();
-            Console.WriteLine("Adding random sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
-
-
-            sw.Reset();
-            sw.Start();
-            for (int i = 0; i < count; i++)
-            {
-                tree.Find(rand.Next(count), out j);
-            }
-            sw.Stop();
-            Console.WriteLine("Finding in ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
-
-
-            sw.Reset();
-            sw.Start();
-            for (int i = 0; i < count; i++)
-            {
-                tree.Remove(elements[i]);
-            }
-            sw.Stop();
-            Console.WriteLine("Removing from ascending sequence takes {0:f3} s", (double)sw.ElapsedMilliseconds / 1000);
-
-
-
-
-
-            Console.ReadLine();
+            
         }
 
         static void printTree<T>(IEnumerable<T> searchTree) where T: IComparable<T>
