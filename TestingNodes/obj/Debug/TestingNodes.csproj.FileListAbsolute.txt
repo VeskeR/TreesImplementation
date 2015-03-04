@@ -14,3 +14,5 @@ D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\TestingNodes\bin\Debug\MyTreesLib.dll
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\TestingNodes\bin\Debug\MyTreesLib.pdb
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\TestingNodes\obj\Debug\TestingNodes.csprojResolveAssemblyReference.cache
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\TestingNodes\bin\Debug\SortingAlgorithmsLib.dll
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\TestingNodes\bin\Debug\SortingAlgorithmsLib.pdb

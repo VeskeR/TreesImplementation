@@ -35,6 +35,9 @@
     <Reference Include="MyTreesLib">
       <HintPath>..\Trees\bin\Debug\MyTreesLib.dll</HintPath>
     </Reference>
+    <Reference Include="SortingAlgorithmsLib">
+      <HintPath>..\..\..\LW 4\SortingAlgorithmsLib\SortingAlgorithmsLib\bin\Release\SortingAlgorithmsLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

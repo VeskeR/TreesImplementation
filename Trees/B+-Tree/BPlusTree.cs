@@ -702,6 +702,12 @@ namespace MyBTreesLib
                         }
                     }
 
+                    if (current.IsRoot && current.KeysCount == 0)
+                    {
+                        NodesCount--;
+                        Head = null;
+                    }
+
                     return true;
                 }
             }
