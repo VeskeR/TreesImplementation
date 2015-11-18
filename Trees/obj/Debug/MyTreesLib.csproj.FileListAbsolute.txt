@@ -8,3 +8,8 @@ D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Trees\obj\Debug\MyTreesLib.pdb
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Trees\bin\Debug\MyTreesLib.dll
 D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Trees\bin\Debug\MyTreesLib.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Trees\bin\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Trees\bin\Debug\MyTreesLib.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Trees\obj\Debug\MyTreesLib.csprojResolveAssemblyReference.cache
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Trees\obj\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Trees\obj\Debug\MyTreesLib.pdb

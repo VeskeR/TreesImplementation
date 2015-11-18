@@ -1,0 +1,16 @@
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\bin\Debug\Test2.exe.config
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\bin\Debug\Test2.exe
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\bin\Debug\Test2.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\bin\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\bin\Debug\MyTreesLib.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\obj\Debug\Test2.csprojResolveAssemblyReference.cache
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\obj\Debug\Test2.exe
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 3\MyTrees\Test2\obj\Debug\Test2.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\bin\Debug\Test2.exe.config
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\obj\Debug\Test2.exe
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\obj\Debug\Test2.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\bin\Debug\Test2.exe
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\bin\Debug\Test2.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\bin\Debug\MyTreesLib.dll
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\bin\Debug\MyTreesLib.pdb
+D:\Work\!-KPI\1 year 2 session\Algorithms and Data Structures\Labs\LW 6\MyTrees\Test2\obj\Debug\Test2.csprojResolveAssemblyReference.cache

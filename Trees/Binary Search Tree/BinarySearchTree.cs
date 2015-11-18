@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyTreesLib
 {
     [Serializable]
     public class BinarySearchTree<T> : BinaryTree<T> where T : IComparable<T>
     {
-        public BinarySearchTreeNode<T> Head { get; protected set; }
-
-
-
         public BinarySearchTree()
         {
-            
         }
 
         public BinarySearchTree(IEnumerable<T> collection)
-            :base(collection)
+            : base(collection)
         {
-
         }
 
+        public BinarySearchTreeNode<T> Head { get; protected set; }
 
 
         public override sealed void Add(T value)
@@ -60,13 +50,12 @@ namespace MyTreesLib
                         }
 
                         current = current.Right;
-                    } 
+                    }
                 }
             }
 
             Count++;
         }
-
 
 
         public override sealed bool Contains(T value)
@@ -102,8 +91,6 @@ namespace MyTreesLib
 
             return current;
         }
-
-
 
         public override sealed bool Remove(T value)
         {
@@ -204,12 +191,11 @@ namespace MyTreesLib
         }
 
 
-
         protected override sealed IEnumerable<T> InOrderTraversal()
         {
             if (Head != null)
             {
-                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                var stack = new Stack<BinarySearchTreeNode<T>>();
                 BinarySearchTreeNode<T> current = Head;
 
                 bool goLeftNext = true;
@@ -249,7 +235,7 @@ namespace MyTreesLib
         {
             if (Head != null)
             {
-                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                var stack = new Stack<BinarySearchTreeNode<T>>();
                 BinarySearchTreeNode<T> current = Head;
 
                 bool goLeftNext = true;
@@ -294,8 +280,6 @@ namespace MyTreesLib
 
                         goLeftNext = false;
                     }
-
-                    
                 }
             }
         }
@@ -304,7 +288,7 @@ namespace MyTreesLib
         {
             if (Head != null)
             {
-                Stack<BinarySearchTreeNode<T>> stack = new Stack<BinarySearchTreeNode<T>>();
+                var stack = new Stack<BinarySearchTreeNode<T>>();
                 BinarySearchTreeNode<T> current = Head;
 
                 bool goLeftNext = true;

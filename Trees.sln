@@ -1,13 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTreesLib", "Trees\MyTreesLib.csproj", "{190FC4A5-8793-41CB-948C-80597376756A}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test2", "Test2\Test2.csproj", "{9CE11282-73B6-4980-9856-8E1F7B45CD7E}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingNodes", "TestingNodes\TestingNodes.csproj", "{27E57F54-FF4B-4F69-9739-1152CA52F8A2}"
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
 EndProject
 Global
+	GlobalSection(HgVSProperties) = preSolution
+		SolutionIsControlled = True
+		SolutionBindings = <Solution Location In Database>
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -17,6 +35,10 @@ Global
 		{190FC4A5-8793-41CB-948C-80597376756A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{190FC4A5-8793-41CB-948C-80597376756A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{190FC4A5-8793-41CB-948C-80597376756A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CE11282-73B6-4980-9856-8E1F7B45CD7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CE11282-73B6-4980-9856-8E1F7B45CD7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CE11282-73B6-4980-9856-8E1F7B45CD7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CE11282-73B6-4980-9856-8E1F7B45CD7E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27E57F54-FF4B-4F69-9739-1152CA52F8A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27E57F54-FF4B-4F69-9739-1152CA52F8A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27E57F54-FF4B-4F69-9739-1152CA52F8A2}.Release|Any CPU.ActiveCfg = Release|Any CPU

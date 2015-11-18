@@ -17,7 +17,7 @@ namespace MyTreesLib
 
         protected BinaryTree()
         {
-            
+
         }
 
         protected BinaryTree(IEnumerable<T> collection)
